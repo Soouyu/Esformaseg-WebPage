@@ -1,0 +1,618 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+     * {
+    @apply border-border;
+  }
+   body {
+    @apply bg-background text-foreground;
+  }
+  :root {
+    /* Esformaseg Brand Colors - Security Training Theme */
+    --background: 0 0% 98%;
+    --foreground: 220 15% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 20%;
+
+    /* Primary: Intense Red for security/action */
+    --primary: 0 85% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: Dark Gray for professionalism */
+    --secondary: 220 15% 25%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 13% 95%;
+    --muted-foreground: 220 9% 55%;
+
+    /* Accent: Bright red for highlights */
+    --accent: 0 100% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 90%;
+    --input: 220 13% 95%;
+    --ring: 0 85% 50%;
+
+    /* Custom Security Theme Variables */
+    --hero-gradient: linear-gradient(135deg, hsl(0 85% 50%) 0%, hsl(220 15% 25%) 100%);
+    --security-red: 0 85% 50%;
+    --security-dark: 220 15% 25%;
+    --security-light: 220 13% 95%;
+    
+    /* Shadows for depth */
+    --shadow-card: 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-hero: 0 20px 25px -5px hsl(0 0% 0% / 0.3);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+@layer utilities {
+  .full-bleed {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+  }
+
+  .perspective {
+    perspective: 1000px;
+  }
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  
+  @keyframes fade-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fade-up 1.2s ease-out both;
+  }
+
+  /* Ya tienes estos */
+  .animate-subtle-zoom {
+    animation: subtleZoom 30s ease-in-out infinite;
+  }
+
+  .animate-gradient-shift {
+    animation: gradientShift 15s ease-in-out infinite;
+    background-size: 200% 200%;
+  }
+
+@media (max-width: 400px) {
+  .video-hero-extend {
+    height: 190vh !important;
+  }
+
+  .video-blur-extend {
+    height: 190vh !important;
+  }
+
+  .title-track-adjust {
+    padding-top: 2rem !important;
+  }
+}
+
+@media (min-width: 401px) and (max-width: 500px) {
+  .video-hero-extend,
+  .video-blur-extend {
+    height: 190vh !important;
+  }
+
+  .title-track-adjust {
+    padding-top: 3.5rem !important;
+  }
+}
+
+@media (min-width: 501px) and (max-width: 600px) {
+  .video-hero-extend,
+  .video-blur-extend {
+    height: 190vh !important;
+  }
+
+  .title-track-adjust {
+    padding-top: 6.5rem !important; /* ← antes era 5rem */
+  }
+}
+@media (min-width: 601px) and (max-width: 764px) {
+  .video-hero-extend,
+  .video-blur-extend {
+    height: 170vh !important; /* o el valor exacto que veas que calza mejor */
+  }
+  .logo-ecuador {
+    bottom: -30rem !important; /* o el valor que mejor se vea visualmente */
+  }
+  .title-track-adjust {
+    margin-top: 12rem !important; /* prueba 6 o 8 o más según necesites */
+  }
+  .vigilancia-center {
+    grid-column: 1 / -1 !important; /* Forzar que la tarjeta ocupe el centro */
+    justify-self: center !important;
+    max-width: 80%; /* Opcional: limitar el ancho */
+  }
+
+}
+
+@media (min-width: 765px) and (max-width: 800px) {
+  .video-hero-extend,
+  .video-blur-extend {
+    height: 150vh !important; /* Baja el video y blur */
+  }
+
+  .logo-ecuador {
+    bottom: -20rem !important; /* Baja el logo del gobierno */
+  }
+
+  .vigilancia-center {
+    grid-column: 1 / -1 !important; 
+    justify-self: center !important;
+    max-width: 80%;
+  }
+}
+
+@media (min-width: 801px) and (max-width: 900px) {
+  .video-hero-extend,
+  .video-blur-extend {
+    height: 170vh !important; /* antes 160vh, lo aumentamos un poco */
+  }
+
+  .logo-ecuador {
+    bottom: -30rem !important; /* lo bajamos un poco más para evitar que se encime */
+  }
+
+  .vigilancia-center {
+    grid-column: 1 / -1 !important;
+    justify-self: center !important;
+    max-width: 70%;
+  }
+
+  .card-highlight-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .title-track-adjust {
+    margin-top: 8rem !important; /* baja el título "Nuestra Trayectoria" si está cortado */
+  }
+}
+
+
+
+@media (min-width: 920px) and (max-width: 1020px) {
+  .video-hero-extend,
+  .video-blur-extend {
+    height: 154vh !important; /* alarga video y fondo difuminado */
+  }
+
+  .logo-ecuador {
+    bottom: -24rem !important; /* baja el logo institucional para que no se encime */
+  }
+
+  .vigilancia-center {
+    grid-column: 1 / -1 !important;
+    justify-self: center !important;
+    max-width: 70%;
+  }
+
+  .card-highlight-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .title-track-adjust {
+    margin-top: 6rem !important; /* asegura que "Nuestra Trayectoria" se vea completo */
+  }
+}
+
+@media (min-width: 1021px) {
+  .video-hero-extend,
+  .video-blur-extend {
+    height: 120vh !important; /* O ajusta a 160vh si prefieres más */
+  }
+
+  .logo-ecuador {
+    bottom: -10rem !important; /* Ajusta según tu necesidad visual */
+  }
+
+  /* IMPORTANTE: desactiva el centrado extra */
+  .vigilancia-center {
+    grid-column: auto !important;
+    justify-self: stretch !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 300px) {
+  .services-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .service-title {
+    font-size: 0.9rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  .service-description {
+    font-size: 0.8rem !important;
+    line-height: 1.3 !important;
+  }
+  
+  .service-button {
+    padding: 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .services-responsive {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  /* Ajustes específicos para las tarjetas */
+  .card {
+    margin: 0 !important;
+    border-radius: 0.25rem !important;
+  }
+  
+  .card-header {
+    padding: 0.75rem !important;
+  }
+  
+  .card-content {
+    padding: 0.75rem !important;
+  }
+  
+  /* Ajuste de iconos */
+  .icon-container {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+  
+  .service-icon {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+  
+  /* Ajuste de lista de características */
+  .feature-list li {
+    font-size: 0.75rem !important;
+  }
+  
+  .feature-bullet {
+    width: 0.25rem !important;
+    height: 0.25rem !important;
+    margin-right: 0.5rem !important;
+  }
+}
+
+@media (max-width: 300px) {
+  .contact-container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  .contact-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .contact-subtitle {
+    font-size: 0.8rem !important;
+  }
+  
+  .contact-card {
+    padding: 0.75rem !important;
+  }
+  
+  .contact-form-label {
+    font-size: 0.7rem !important;
+  }
+  
+  .contact-form-input {
+    font-size: 0.7rem !important;
+    padding: 0.25rem 0.5rem !important;
+    height: 1.75rem !important;
+  }
+  
+  .contact-info-icon {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+  
+  .contact-info-text {
+    font-size: 0.7rem !important;
+  }
+  
+  .contact-map-container {
+    height: 120px !important;
+  }
+  
+  .contact-map-icon {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+  
+  .contact-map-text {
+    font-size: 0.7rem !important;
+  }
+  
+  .contact-button {
+    padding: 0.25rem !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+
+@keyframes gradientShift {
+  0% {
+    background: linear-gradient(135deg, hsl(220, 15%, 15%), hsl(220, 15%, 10%));
+  }
+  50% {
+    background: linear-gradient(135deg, hsl(220, 13%, 13%), hsl(220, 12%, 8%));
+  }
+  100% {
+    background: linear-gradient(135deg, hsl(220, 15%, 15%), hsl(220, 15%, 10%));
+  }
+}
+
+@keyframes subtleZoom {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.animate-subtle-zoom {
+  animation: subtleZoom 30s ease-in-out infinite;
+}
+
+
+.animate-gradient-shift {
+  animation: gradientShift 15s ease-in-out infinite;
+  background-size: 200% 200%;
+}
+.flip-card {
+  perspective: 1000px;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
+}
+
+.flip-card:hover .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-front,
+.flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 0.75rem;
+}
+
+.flip-front {
+  z-index: 2;
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+.dot-grid-bg {
+  background-color: #f7f7f7; /* Un gris muy claro */
+  background-image: radial-gradient(#d3d3d3 1px, transparent 1px); /* Puntos grises */
+  background-size: 15px 15px; /* Un poco más pequeños */
+}
+
+.cert-carousel-track {
+  display: flex;
+  width: max-content;
+  animation: scrollCertificates 40s linear infinite;
+}
+
+@keyframes scrollCertificates {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.cert-carousel-item {
+  flex: 0 0 auto;
+  width: 300px; /* ajusta según tu diseño */
+  margin-right: 2rem;
+}
+
+.cert-carousel-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.cert-carousel-track {
+  display: flex;
+  width: max-content;
+  animation: scrollCertificates 15s linear infinite;
+}
+
+@keyframes scrollCertificates {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.cert-bg {
+  background-color: #111827; /* Gris azulado profundo */
+  background-image: url('/assets/pattern-lines.svg'); /* Puedes generar un SVG sutil tipo red de nodos */
+  background-size: cover;
+  background-position: center;
+}
+@keyframes fadeZoom {
+  0% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-zoom {
+  animation: fadeZoom 2.5s ease-in-out both;
+}
+
+@keyframes diagonalScroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+.animated-lines-bg {
+  @apply full-bleed;
+  background-color: #fafafa;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(150, 150, 150, 0.15) 0px,
+    rgba(150, 150, 150, 0.15) 1px,
+    transparent 1px,
+    transparent 20px
+  );
+  background-size: 20px 20px;
+  animation: diagonalScroll 30s linear infinite;
+}
+
+@keyframes pulseIcon {
+  0%, 97%, 100% {
+    transform: scale(1);
+  }
+  98% {
+    transform: scale(1.15);
+  }
+  99% {
+    transform: scale(0.95);
+  }
+}
+
+.animate-pulse-delayed {
+  animation: pulseIcon 10s ease-in-out infinite;
+}
+.special-animated-bg {
+  background: linear-gradient(
+    135deg,
+    #f0ebeb,
+    #949090,
+    #828282,
+    #565555,
+    #f6f2f2,
+    #5f5e5e
+  );
+  background-size: 400% 400%;
+  animation: softLavaBackground 10s ease-in-out infinite;
+}
+
+@keyframes softLavaBackground {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+}
