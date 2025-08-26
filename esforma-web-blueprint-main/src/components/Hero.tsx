@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect, useRef } from "react";
 import logoEcuador from '@/assets/logo-ecuador-hero.png'
-import esformasegLogo from "@/assets/esformaseg-logo.png";
+import esformasegLogo from "@/assets/esformaseg-logo.webp";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import instructorVideo from '@/assets/instructor.mp4';
@@ -118,11 +118,16 @@ const Hero = () => {
             <AnimateOnScroll delay={0}>
               <div className="flex justify-center mb-0">
                 <motion.img
-                  src={esformasegLogo}
-                  alt="Esformaseg"
-                  layoutId="logo"
-                  className="h-24 w-24 xs:h-24 xs:w-24 sm:h-20 sm:w-20 md:h-32 md:w-32 sm:mt-6 drop-shadow-[0_0_25px_rgba(255,255,255,0.2)]"
-                />
+   src={esformasegLogo}
+   alt="Esformaseg"
+   layoutId="logo"
+   width={128}               // reserva espacio → sin CLS
+   height={128}
+   loading="eager"           // fuerza a venir primero
+   decoding="async"
+   fetchPriority="high"      // pista para el navegador
+   className="h-24 w-24 xs:h-24 xs:w-24 sm:h-20 sm:w-20 md:h-32 md:w-32 sm:mt-6 drop-shadow-[0_0_25px_rgba(255,255,255,0.2)]"
+/>
               </div>
             </AnimateOnScroll>
             <AnimateOnScroll delay={0.2}>
