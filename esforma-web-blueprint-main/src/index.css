@@ -132,7 +132,7 @@ All colors MUST be HSL.
   min-height: calc(var(--vh, 1vh) * 100);
 }
 
-:root { --nav-h: 72px; }            /* base (md~) */
+:root { --nav-h: 64px; }            /* base (md~) */
 @media (min-width: 1024px) { :root { --nav-h: 80px; } }  /* lg */
 @media (min-width: 1280px) { :root { --nav-h: 96px; } }  /* xl */
 
@@ -144,12 +144,18 @@ All colors MUST be HSL.
 .scroll-mt-safe {
   scroll-margin-top: max(64px, env(safe-area-inset-top));
 }
+.full-bleed {
+  position: relative;       /* asegura que hijos absolutos se anclen */
+  width: 100vw;             /* ocupa todo el ancho de la ventana */
+  left: 50%;                /* centrado */
+  right: 50%;
+  margin-left: -50vw;       /* compensa el centrado */
+  margin-right: -50vw;
+  max-width: 100vw;         /* evita scroll horizontal extra */
+  overflow-x: hidden;       /* quita márgenes blancos en móvil */
+}
 
-  .full-bleed {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
-  }
+
 
   .perspective {
     perspective: 1000px;
@@ -285,13 +291,12 @@ All colors MUST be HSL.
   }
 }
 
+/* Override: el video ocupa el alto del section y no más */
+
 
 
 @media (min-width: 920px) and (max-width: 1020px) {
-  .video-hero-extend,
-  .video-blur-extend {
-    height: 154vh !important; /* alarga video y fondo difuminado */
-  }
+
 
   .logo-ecuador {
     bottom: -24rem !important; /* baja el logo institucional para que no se encime */

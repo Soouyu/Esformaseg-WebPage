@@ -47,7 +47,7 @@ const Navigation = () => {
       `}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-[var(--nav-h)]">
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <img

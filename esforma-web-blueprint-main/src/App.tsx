@@ -29,7 +29,7 @@ export default function App() {
             <BrowserRouter>
               <Navigation />
 
-              <main className="min-h-screen pt-8 px-8">
+              <main className="min-h-screen pt-[var(--nav-h)] px-0">
                 <Routes>
                   {/* Home con loader solo la primera vez */}
                   <Route path="/" element={<HeroWithLoader />} />

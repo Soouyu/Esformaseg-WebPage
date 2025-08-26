@@ -1,18 +1,15 @@
-import { Shield, Users, Award, ArrowDown,BookOpenCheck,
-  Handshake,CheckCircle,Gavel,
-  MessagesSquare, Binoculars,Wrench,ActivitySquare,AlertTriangle,Target } from "lucide-react";
+import { Shield, Users, Award, ArrowDown, BookOpenCheck,
+  Handshake, CheckCircle, Gavel,
+  MessagesSquare, Binoculars, Wrench, ActivitySquare, AlertTriangle, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect, useRef } from "react";
 import logoEcuador from '@/assets/logo-ecuador-hero.png'
 import esformasegLogo from "@/assets/esformaseg-logo.png";
-// añade esta línea con tus otros imports
-
-
 import AnimateOnScroll from "@/components/AnimateOnScroll";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import instructorVideo from '@/assets/instructor.mp4';
-import  escudo from "@/assets/escudo-mensaje.gif"
+import escudo from "@/assets/escudo-mensaje.gif"
 import videoFondo from "@/assets/hero-background.mp4"
 import React from "react";
 import { motion } from "framer-motion";
@@ -26,16 +23,16 @@ const Hero = () => {
   };
 
   // valores finales
-const targets = { students: 9600, years: 10, courses: 480, schools: 4 };
+  const targets = { students: 9600, years: 10, courses: 480, schools: 4 };
 
-const iconMap: Record<string, React.ElementType> = {
-  Gavel: Gavel,
-  Shield: Shield,
-  BookOpenCheck: BookOpenCheck,
-  Users: Users,
-  AlertTriangle: AlertTriangle,
-  Award: Award
-};
+  const iconMap: Record<string, React.ElementType> = {
+    Gavel: Gavel,
+    Shield: Shield,
+    BookOpenCheck: BookOpenCheck,
+    Users: Users,
+    AlertTriangle: AlertTriangle,
+    Award: Award
+  };
 
   // estados animados
   const [students, setStudents] = useState(0);
@@ -97,133 +94,122 @@ const iconMap: Record<string, React.ElementType> = {
 
   return (
     <>
-<motion.div 
-    initial={{ opacity: 0 }} 
-    animate={{ opacity: 1 }} 
-    transition={{ duration: 0.8, ease: "easeInOut" }}
-  ></motion.div>
-<section
-  id="inicio"
-  className="full-bleed min-h-[120vh] flex items-start hero-overlap"
->
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+      ></motion.div>
+<section id="inicio" className="full-bleed hero-overlap relative overflow-hidden min-h-screen grid isolate">  
+        {/* Video y gradiente de fondo, están bien así */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src={videoFondo}
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-security-dark/60 via-security-dark/80 to-transparent" />
 
+        {/* Contenido principal, aquí está el cambio ⬇️ */}
+        <div className="relative z-10 w-full px-4 pt-[calc(var(--nav-h)+0.5rem)] sm:px-6 md:px-12">
+          <div className="max-w-6xl mx-auto text-center text-white w-full">
+            {/* Logo and Brand */}
+            <AnimateOnScroll delay={0}>
+              <div className="flex justify-center mb-0">
+                <motion.img
+                  src={esformasegLogo}
+                  alt="Esformaseg"
+                  layoutId="logo"
+                  className="h-24 w-24 xs:h-24 xs:w-24 sm:h-20 sm:w-20 md:h-32 md:w-32 sm:mt-6 drop-shadow-[0_0_25px_rgba(255,255,255,0.2)]"
+                />
+              </div>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={0.2}>
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 leading-tight">
+                <span className="text-white">Esformaseg</span>
+              </h1>
+            </AnimateOnScroll>
+            
+            <AnimateOnScroll delay={0.3}>
+              <p className="text-lg sm:text-xl md:text-2xl mb-6 text-white/90 font-medium">
+                Entrenamiento del más alto nivel
+              </p>
+            </AnimateOnScroll>
 
-  {/* Video de fondo (sin cambios) */}
-<video
-  className="absolute inset-0 object-cover w-full video-hero-extend"
-  src={videoFondo}
-  autoPlay
-  muted
-  loop
-/>
+            <AnimateOnScroll delay={0.4}>
+              <p className="text-lg md:text-xl mb-12 text-white/80 max-w-2xl mx-auto leading-relaxed">
+                Centro de Formación en Vigilancia y Seguridad Privada
+                <br /> {/* Aquí la corrección de la etiqueta */}
+                "Formamos profesionales altamente capacitados y con certificaciones oficiales".
+              </p>
+            </AnimateOnScroll>
+            
+            {/* Call to Action Buttons */}
+            <AnimateOnScroll delay={0.5}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-white hover:text-primary text-white font-semibold px-6 py-3 text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                  onClick={() => navigateToPage("/servicios")}
+                >
+                  Conoce nuestros cursos
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-primary text-primary hover:bg-primary hover:text-white font-semibold px-8 py-4 text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                  onClick={() => navigateToPage("/contacto")}
+                >
+                  Contáctanos
+                </Button>
+              </div>
+            </AnimateOnScroll>
 
-<div className="absolute inset-0 bg-gradient-to-br from-security-dark/60 via-security-dark/80 to-primary/ video-blur-extend" />
+            {/* Service Highlights */}
+            <AnimateOnScroll delay={0.6}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-10 sm:mt-0 card-highlight-container">
+                {highlights.map((highlight, index) => (
+                  <Card
+                    key={index}
+                    className={`bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300 ${
+                      index === 2 ? "vigilancia-center" : ""
+                    }`}
+                  >
+                    <CardContent className="p-4 text-center">
+                      <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center rounded-full bg-primary/20 shadow-[0_0_10px_rgba(255,0,0,0.3)]">
+                        <highlight.icon className="h-8 w-8 text-white drop-shadow-md" />
+                      </div>
+                      <h3 className="text-xl sm:text-2xl font-semibold mb-2 text-white">
+                        {highlight.title}
+                      </h3>
+                      <p className="text-white/80 text-sm">{highlight.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </AnimateOnScroll>
 
-
-
-  {/* Contenido con animaciones */}
-  <div className="relative z-10 w-full px-4 py-8 sm:px-6 md:px-12">
-    <div className="max-w-6xl mx-auto text-center text-white w-full">
-      {/* Logo and Brand */}
-      <AnimateOnScroll delay={0}>
-  <div className="flex justify-center mb-0">
-    <motion.img
-      src={esformasegLogo}
-      alt="Esformaseg"
-      layoutId="logo"
-      className="h-24 w-24 xs:h-24 xs:w-24 sm:h-20 sm:w-20 md:h-32 md:w-32 sm:mt-6 drop-shadow-[0_0_25px_rgba(255,255,255,0.2)]"
-    />
-  </div>
-</AnimateOnScroll>
-      <AnimateOnScroll delay={0.2}>
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 leading-tight">
-          <span className="text-white">Esformaseg</span>
-        </h1>
-      </AnimateOnScroll>
-      
-      <AnimateOnScroll delay={0.3}>
-        <p className="text-lg sm:text-xl md:text-2xl mb-6 text-white/90 font-medium">
-          Entrenamiento del más alto nivel
-        </p>
-      </AnimateOnScroll>
-
-      <AnimateOnScroll delay={0.4}>
-        <p className="text-lg md:text-xl mb-12 text-white/80 max-w-2xl mx-auto leading-relaxed">
-          Centro de Formación en Vigilancia y Seguridad Privada
-          <br>
-          </br>
-          "Formamos profesionales altamente capacitados y con certificaciones oficiales".
-        </p>
-      </AnimateOnScroll>
-      
-
-      {/* Call to Action Buttons */}
-      <AnimateOnScroll delay={0.5}>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-          <Button 
-            size="lg" 
-            className="bg-primary hover:bg-white hover:text-primary text-white font-semibold px-6 py-3 text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-            onClick={() => navigateToPage("/servicios")}
-          >
-            Conoce nuestros cursos
-          </Button>
-          <Button 
-            size="lg" 
-            variant="outline" 
-            className="border-primary text-primary hover:bg-primary hover:text-white font-semibold px-8 py-4 text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-            onClick={() => navigateToPage("/contacto")}
-          >
-            Contáctanos
-          </Button>
+            <AnimateOnScroll delay={0.7}>
+              <button
+                onClick={() => document.querySelector("#sobre")?.scrollIntoView({ behavior: "smooth" })}
+                className="mt-12 animate-bounce text-white mx-auto block"
+              >
+                <ArrowDown size={32} />
+              </button>
+            </AnimateOnScroll>
+          </div>
         </div>
-      </AnimateOnScroll>
 
-      {/* Service Highlights */}
-      <AnimateOnScroll delay={0.6}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-10 sm:mt-0 card-highlight-container">
-          {highlights.map((highlight, index) => (
-            <Card
-              key={index}
-              className={`bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300 ${
-                index === 2 ? "vigilancia-center" : ""
-              }`}
-            >
-              <CardContent className="p-4 text-center">
-                <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center rounded-full bg-primary/20 shadow-[0_0_10px_rgba(255,0,0,0.3)]">
-  <highlight.icon className="h-8 w-8 text-white drop-shadow-md" />
-</div>
-
-                <h3 className="text-xl sm:text-2xl font-semibold mb-2 text-white">
-       {highlight.title}
-     </h3>
-                <p className="text-white/80 text-sm">{highlight.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+        {/* Sello institucional (sin animación) */}
+        <div className="hidden sm:flex absolute bottom-2 right-2 items-center gap-2 px-2 py-1 logo-ecuador">
+          <img src={logoEcuador} alt="Sello Esformaseg" className="h-24 w-auto" />
+          <div className="text-white text-xs leading-tight drop-shadow-sm">
+            <p className="font-semibold">Centro de Formación Autorizado</p>
+            <p>Acuerdo Ministerial No. 0091</p>
+          </div>
         </div>
-      </AnimateOnScroll>
-
-      <AnimateOnScroll delay={0.7}>
-        <button
-          onClick={() => document.querySelector("#sobre")?.scrollIntoView({ behavior: "smooth" })}
-          className="mt-12 animate-bounce text-white mx-auto block"
-        >
-          <ArrowDown size={32} />
-        </button>
-      </AnimateOnScroll>
-    </div>
-  </div>
-
-  {/* Sello institucional (sin animación) */}
-  <div className="hidden sm:flex absolute bottom-2 right-2 items-center gap-2 px-2 py-1 logo-ecuador">
-    <img src={logoEcuador} alt="Sello Esformaseg" className="h-24 w-auto" />
-    <div className="text-white text-xs leading-tight drop-shadow-sm">
-      <p className="font-semibold">Centro de Formación Autorizado</p>
-      <p>Acuerdo Ministerial No. 0091</p>
-    </div>
-  </div>
-</section>
-
+      </section>
 
 
   <section
