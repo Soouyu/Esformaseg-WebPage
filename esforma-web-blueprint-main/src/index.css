@@ -123,6 +123,28 @@ All colors MUST be HSL.
   }
 }
 @layer utilities {
+
+  /* Alturas seguras para móviles (fix vh) */
+.h-screen-fix {
+  height: calc(var(--vh, 1vh) * 100);
+}
+.min-h-screen-fix {
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
+:root { --nav-h: 72px; }            /* base (md~) */
+@media (min-width: 1024px) { :root { --nav-h: 80px; } }  /* lg */
+@media (min-width: 1280px) { :root { --nav-h: 96px; } }  /* xl */
+
+.hero-overlap {
+  margin-top: calc(var(--nav-h) * -1);
+}
+
+/* Para scroll anclado con navbar fijo */
+.scroll-mt-safe {
+  scroll-margin-top: max(64px, env(safe-area-inset-top));
+}
+
   .full-bleed {
     width: 100vw;
     margin-left: calc(-50vw + 50%);

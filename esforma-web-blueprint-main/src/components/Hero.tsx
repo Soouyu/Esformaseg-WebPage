@@ -102,7 +102,12 @@ const iconMap: Record<string, React.ElementType> = {
     animate={{ opacity: 1 }} 
     transition={{ duration: 0.8, ease: "easeInOut" }}
   ></motion.div>
- <section id="inicio" className="full-bleed min-h-[120vh] flex items-start -mt-8 pt-8">
+<section
+  id="inicio"
+  className="full-bleed min-h-[120vh] flex items-start hero-overlap"
+>
+
+
   {/* Video de fondo (sin cambios) */}
 <video
   className="absolute inset-0 object-cover w-full video-hero-extend"
