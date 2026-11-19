@@ -2,24 +2,25 @@ import { Target, Eye, Heart, Award, Users, Shield, MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
 import escudo from "@/assets/fondo-nodos.mp4";
+import { sedes as sedesData } from "@/data/sedes";
 import useEmblaCarousel from 'embla-carousel-react'
 import { useEffect, useRef } from 'react'
 
 import { Info, FileText, Globe } from "lucide-react";
-import security from '@/assets/security.png'
-import sedes from '@/assets/fondo-sedes.png'
-import cert1 from "@/assets/cert1.png";
-import cert2 from "@/assets/cert2.png";
-import cert3 from "@/assets/cert3.png";
-import cert4 from "@/assets/cert4.png";
-import cert5 from "@/assets/cert5.png"
-import cert6 from "@/assets/cert6.png"
-import certCARR from "@/assets/CERTIFICADO 1.png";
-import diploma1 from "@/assets/DIPLOMA 1.jpg";
-import diploma2 from "@/assets/DIPLOMA 2.jpg";
-import diploma3 from "@/assets/DIPLOMA 3.jpg";
-import diploma4 from "@/assets/DIPLOMA 4.jpg";
-import diploma5 from "@/assets/DIPLOMA 5.jpg";
+import security from '@/assets/security.webp'
+import sedes from '@/assets/fondo-sedes.webp'
+import cert1 from "@/assets/cert1.webp";
+import cert2 from "@/assets/cert2.webp";
+import cert3 from "@/assets/cert3.webp";
+import cert4 from "@/assets/cert4.webp";
+import cert5 from "@/assets/cert5.webp"
+import cert6 from "@/assets/cert6.webp"
+import certCARR from "@/assets/certificado-1.webp";
+import diploma1 from "@/assets/diploma-1.webp";
+import diploma2 from "@/assets/diploma-2.webp";
+import diploma3 from "@/assets/diploma-3.webp";
+import diploma4 from "@/assets/diploma-4.webp";
+import diploma5 from "@/assets/diploma-5.webp";
 
 
 interface Props {
@@ -88,24 +89,7 @@ useEffect(() => {
     },
   ];
 
-  const branches = [
-    {
-      city: "Quito",
-      address: "Av. de las Palmeras N45-91 y de los Madroños, junto al Conjunto Aranjuez 2",
-    },
-    {
-      city: "Esmeraldas",
-      address: "Ricaurte 4-12 entre Eloy Alfaro y Colón",
-    },
-    {
-      city: "Santo Domingo",
-      address: "Av. Clemencia de Mora 242 y Calle Río Puyango",
-    },
-    {
-      city: "Orellana",
-      address: "Calle Alejandro Labaka y Calle Cabrera (El Coca)",
-    },
-  ];
+  const branches = sedesData.map((s) => ({ city: s.ciudad, address: s.direccion }));
 
   
 
@@ -129,6 +113,8 @@ useEffect(() => {
     loop
     muted
     playsInline
+    preload="metadata"
+    aria-hidden="true"
     className="absolute inset-0 w-full h-full object-cover"
   >
     <source src={escudo} type="video/mp4" />
@@ -311,7 +297,7 @@ useEffect(() => {
       </h3>
     </AnimateOnScroll>
 
-    <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+    <div className="grid md:grid-cols-3 gap-6 lg:gap-10 max-w-5xl mx-auto">
       {branches.map((branch, i) => {
         const animationList: Parameters<typeof AnimateOnScroll>[0]["type"][] = [
           "zoomBounce",
@@ -367,6 +353,8 @@ useEffect(() => {
           <img
           src={img}
           alt={`Certificado ${i + 1}`}
+          loading="lazy"
+          decoding="async"
           className="w-full h-[180px] object-contain block bg-white"
         />
 

@@ -4,26 +4,30 @@ import { Shield, Users, Award, ArrowDown, BookOpenCheck,
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect, useRef } from "react";
-import logoEcuador from '@/assets/logo-ecuador-hero.png'
+import logoEcuador from '@/assets/logo-ecuador-hero.webp'
 import esformasegLogo from "@/assets/esformaseg-logo.webp";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import instructorVideo from '@/assets/instructor.mp4';
-import escudo from "@/assets/escudo-mensaje.gif"
 import videoFondo from "@/assets/hero-background.mp4"
 import React from "react";
 import { motion } from "framer-motion";
 import fontoMeto from '@/assets/cartographer.png'
-import fondo2 from '@/assets/fondo2.png'
-import tiro from '@/assets/fondo-tiro.jpg'
+import fondo2 from '@/assets/fondo2.webp'
+import tiro from '@/assets/fondo-tiro.webp'
+const heroPoster = "/hero-poster.webp";
+import { useNavigate } from "react-router-dom";
+import { sedes } from "@/data/sedes";
 
 const Hero = () => {
+  const navigate = useNavigate();
   const navigateToPage = (href: string) => {
-    window.location.href = href;
+    navigate(href);
+    window.scrollTo(0, 0);
   };
 
   // valores finales
-  const targets = { students: 9600, years: 10, courses: 480, schools: 4 };
+  const targets = { students: 9600, years: 10, courses: 480, schools: sedes.length };
 
   const iconMap: Record<string, React.ElementType> = {
     Gavel: Gavel,
@@ -104,6 +108,9 @@ const Hero = () => {
         <video
           className="absolute inset-0 w-full h-full object-cover"
           src={videoFondo}
+          poster={heroPoster}
+          preload="auto"
+          aria-hidden="true"
           autoPlay
           muted
           loop
@@ -208,7 +215,7 @@ const Hero = () => {
 
         {/* Sello institucional (sin animación) */}
         <div className="hidden sm:flex absolute bottom-2 right-2 items-center gap-2 px-2 py-1 logo-ecuador">
-          <img src={logoEcuador} alt="Sello Esformaseg" className="h-24 w-auto" />
+          <img src={logoEcuador} alt="Sello Esformaseg" width={96} height={96} decoding="async" className="h-24 w-auto" />
           <div className="text-white text-xs leading-tight drop-shadow-sm">
             <p className="font-semibold">Centro de Formación Autorizado</p>
             <p>Acuerdo Ministerial No. 0091</p>
@@ -271,6 +278,8 @@ const Hero = () => {
       <img
         src={tiro}
         alt="Tiro al blanco"
+        loading="lazy"
+        decoding="async"
         className="w-full h-full object-cover"
       />
       {/* Overlay semitransparente */}
@@ -326,7 +335,7 @@ const Hero = () => {
           <Button
             size="lg"
             className="mt-auto self-start bg-primary hover:bg-primary/90 text-white font-semibold px-6 py-3"
-            onClick={() => window.location.href = "/servicios#curso-destreza"}
+            onClick={() => navigate("/servicios#curso-destreza")}
           >
             Mas informacion
           </Button>
@@ -440,6 +449,8 @@ const Hero = () => {
     <img
       src={fontoMeto}
       alt="Decoración fondo"
+        loading="lazy"
+        decoding="async"
       className="w-full h-full object-cover opacity-20"
     />
   </div>
@@ -451,6 +462,8 @@ const Hero = () => {
         <div className="w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-xl">
           <video
             src={instructorVideo}
+            preload="none"
+            aria-label="Instructor de Esformaseg en entrenamiento"
             autoPlay
             muted
             loop
@@ -521,7 +534,7 @@ const Hero = () => {
           <Button
             size="lg"
             className="bg-primary text-white px-8 py-3 text-base font-semibold hover:bg-primary/90"
-            onClick={() => window.location.href = "/servicios"}
+            onClick={() => navigateToPage("/servicios")}
           >
             Ver Cursos
           </Button>
@@ -529,7 +542,7 @@ const Hero = () => {
             size="lg"
             variant="outline"
             className="border-primary text-primary px-8 py-3 text-base font-semibold hover:bg-primary hover:text-white"
-            onClick={() => window.location.href = "/contacto"}
+            onClick={() => navigateToPage("/contacto")}
           >
             Contáctanos
           </Button>
@@ -546,6 +559,8 @@ const Hero = () => {
     <img
       src={fondo2}
       alt="Decoración fondo"
+        loading="lazy"
+        decoding="async"
       className="w-full h-full object-cover"
     />
   </div>

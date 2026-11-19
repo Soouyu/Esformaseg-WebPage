@@ -1,31 +1,42 @@
 // src/components/HeroWithLoader.tsx
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Hero from "./Hero";
 import { Loader } from "./Loader";
 
+const KEY = "hasSeenHeroLoader";
+
+const hasSeenLoader = () => {
+  try {
+    return sessionStorage.getItem(KEY) === "true";
+  } catch {
+    return true;
+  }
+};
+
+/**
+ * El Hero se monta desde el inicio (debajo del loader), así el video, las fuentes
+ * y las imágenes se descargan MIENTRAS corre la animación. El loader sale solo una vez por sesión.
+ */
 export const HeroWithLoader = () => {
-  const [showLoader, setShowLoader] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const [showLoader, setShowLoader] = useState(() => !hasSeenLoader());
 
   useEffect(() => {
-    // Sólo por sesión: sessionStorage en lugar de localStorage
-    const seen = sessionStorage.getItem("hasSeenHeroLoader");
-    const hasSeen = seen === "true";
-
-    if (!hasSeen) {
-      setShowLoader(true);
-    }
-    setChecked(true);
-  }, []);
+    if (!showLoader) document.getElementById("boot-splash")?.remove();
+  }, [showLoader]);
 
   const handleFinish = () => {
-    sessionStorage.setItem("hasSeenHeroLoader", "true");
+    try {
+      sessionStorage.setItem(KEY, "true");
+    } catch {
+      /* ignore */
+    }
     setShowLoader(false);
   };
 
-  if (!checked) return null;
-
-  return showLoader
-    ? <Loader onFinish={handleFinish} />
-    : <Hero />;
+  return (
+    <>
+      <Hero />
+      {showLoader && <Loader onFinish={handleFinish} />}
+    </>
+  );
 };

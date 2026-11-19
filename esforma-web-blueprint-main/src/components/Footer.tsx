@@ -1,5 +1,5 @@
 import { Facebook, Instagram, Phone, Mail, MapPin } from "lucide-react";
-import esformasegLogo from "@/assets/esformaseg-logo.png";
+import esformasegLogo from "@/assets/esformaseg-logo.webp";
 import { useNearestSede } from "@/hooks/useNearestSede";
 
 const Footer = () => {
@@ -132,11 +132,15 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary flex-shrink-0" />
-                <span className="text-white/80">+593 2 123-4567</span>
+                <a href="tel:+593983334038" className="text-white/80 hover:text-white transition-colors">
+                  098 333 4038
+                </a>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary flex-shrink-0" />
-                <span className="text-white/80">info@esformaseg.com</span>
+                <a href="mailto:infoesformaseg@gmail.com" className="text-white/80 hover:text-white transition-colors break-all">
+                  infoesformaseg@gmail.com
+                </a>
               </div>
             </div>
           </div>

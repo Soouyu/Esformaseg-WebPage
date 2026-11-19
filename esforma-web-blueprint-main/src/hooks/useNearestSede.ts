@@ -1,108 +1,144 @@
-import { useEffect, useState } from "react";
-import quitoImg from '@/assets/citys/quito-ubicacion.jpeg';
-import esmeraldasImg from '@/assets/citys/esmeraldas2.jpg';
-import santoDomingoImg from '@/assets/citys/santo-domingo2.jpg';
-import orellanaImg from '@/assets/citys/orellana-ubicacion2.jpg';
+import { useEffect, useSyncExternalStore } from "react";
+import { sedes, sedePrincipal, type Location } from "@/data/sedes";
 
+export type { Location } from "@/data/sedes";
 
-export interface Location {
-  ciudad: string;
-  direccion: string;
-  coordenadas: { lat: number; lng: number };
-  mapaUrl: string;
-  email: string;
-  whatsapp: string;
-  horarios: string;
-  imagenCiudad?: string;
+/**
+ * Sede más cercana — estado compartido por toda la app.
+ *
+ * - Nunca muestra el permiso de ubicación al cargar la página.
+ * - Solo consulta el GPS sin preguntar si el usuario YA dio permiso antes.
+ * - El permiso se pide únicamente cuando el usuario pulsa "Usar mi ubicación".
+ * - El resultado (o la sede elegida a mano) se guarda en localStorage por 30 días,
+ *   así Footer, WhatsApp y Contacto muestran la misma sede sin volver a preguntar.
+ */
+
+export type SedeStatus = "default" | "locating" | "located" | "manual" | "denied" | "unavailable";
+
+interface SedeState {
+  sede: Location;
+  status: SedeStatus;
 }
 
+const STORAGE_KEY = "esformaseg:sede";
+const TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
-const sedes: Location[] = [
-  {
-  ciudad: "Quito",
-  direccion: "Av. de las Palmeras N45-91 y de los Madroños, junto al Conjunto Aranjuez 2",
-  coordenadas: { lat: -0.180653, lng: -78.467834 },
- mapaUrl: "https://maps.google.com/maps?q=-0.155545,-78.469633&z=19&output=embed",
- email: "infoesformaseg@gmail.com",
-    whatsapp: "0983334038 / 0958950304",
-    horarios: "8:30 am a 5:00 pm",
-    imagenCiudad: quitoImg,
+const findByCity = (ciudad: string) => sedes.find((s) => s.ciudad === ciudad);
 
-  },
- {
-  ciudad: "Esmeraldas",
-  direccion: "Ricaurte 4-12 entre Eloy Alfaro y Colón",
-  coordenadas: { lat: 0.961550, lng: -79.654216 },
-  mapaUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d296.50326202368495!2d-79.65421625749707!3d0.9615496619017962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f19!3m3!1m2!1s0x8fd4bfb7343eb19f%3A0x45ba51107547aa9b!2sEsformaseg%20Esmeraldas%20Centro%20de%20Capacitacion%20de%20Guardias%20de%20Seguridad!5e0!3m2!1ses-419!2sec!4v1753830217033!5m2!1ses-419!2sec",
-  email: "infoesmeraldas.esformaseg@gmail.com",
-    whatsapp: "0963936097",
-    horarios: "8:30 am a 5:00 pm",
-    imagenCiudad: esmeraldasImg,
-
-},
-{
-  ciudad: "Santo Domingo",
-  direccion: "Av. Clemencia de Mora 242 y Calle Río Puyango",
-  coordenadas: { lat: -0.2450567, lng: -79.1709463 }, // Coordenadas exactas para geolocalización
-  mapaUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d997.4454568191431!2d-79.17094629999998!3d-0.24505670000000032!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d546443b11d9b9%3A0x14ea2f1a98f22874!2sQR3H%2BXJ4%2C%20Santo%20Domingo!5e0!3m2!1ses-419!2sec!4v1753831007784!5m2!1ses-419!2sec",
-  email: "esformaseg.sdt@gmail.com",
-    whatsapp: "0987899306",
-    horarios: "8:30 am a 5:00 pm",
-    imagenCiudad: santoDomingoImg,
-},
-{
-  ciudad: "Orellana",
-  direccion: "Calle Alejandro Labaka y Calle Cabrera (El Coca)",
-  coordenadas: { lat: -0.466586, lng: -76.982731 }, // Coordenadas exactas del marcador
-  mapaUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d431.65238738855476!2d-76.98273102750086!3d-0.4665863799144915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d7a5b1b5ea8703%3A0x68ca17c23ab8003a!2sLUBRIMAX!5e0!3m2!1ses-419!2sec!4v1753831123465!5m2!1ses-419!2sec",
- email: "infoelcoca.esformaseg@gmail.com",
-    whatsapp: "0984981373",
-    horarios: "8:30 am a 5:00 pm",
-    imagenCiudad: orellanaImg,
+function readCache(): SedeState | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const { ciudad, status, ts } = JSON.parse(raw);
+    const sede = findByCity(ciudad);
+    // Si la sede ya no existe (p. ej. se cerró) o expiró, se descarta.
+    if (!sede || Date.now() - ts > TTL_MS) return null;
+    return { sede, status };
+  } catch {
+    return null;
+  }
 }
 
-];
+function writeCache(state: SedeState) {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ ciudad: state.sede.ciudad, status: state.status, ts: Date.now() })
+    );
+  } catch {
+    /* almacenamiento bloqueado: se ignora */
+  }
+}
 
-const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+let state: SedeState = readCache() ?? { sede: sedePrincipal, status: "default" };
+const listeners = new Set<() => void>();
+
+function setState(next: SedeState, persist = true) {
+  state = next;
+  if (persist && (next.status === "located" || next.status === "manual")) writeCache(next);
+  listeners.forEach((l) => l());
+}
+
+const subscribe = (l: () => void) => {
+  listeners.add(l);
+  return () => listeners.delete(l);
+};
+const getSnapshot = () => state;
+
+const distanceKm = (lat1: number, lon1: number, lat2: number, lon2: number) => {
   const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
-export const useNearestSede = (): Location => {
-  const [nearest, setNearest] = useState<Location>(sedes[0]);
+const closestTo = (lat: number, lng: number) =>
+  sedes.reduce((best, s) =>
+    distanceKm(lat, lng, s.coordenadas.lat, s.coordenadas.lng) <
+    distanceKm(lat, lng, best.coordenadas.lat, best.coordenadas.lng)
+      ? s
+      : best
+  );
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          let closest = sedes[0];
-          let minDistance = Infinity;
+let inFlight = false;
 
-          for (const sede of sedes) {
-            const dist = calculateDistance(latitude, longitude, sede.coordenadas.lat, sede.coordenadas.lng);
-            if (dist < minDistance) {
-              minDistance = dist;
-              closest = sede;
-            }
-          }
-
-          setNearest(closest);
-        },
-        () => {
-          // si falla, se queda con la sede[0]
-        }
+/** Pide la ubicación (muestra el permiso del navegador si aún no se ha dado). */
+export function locateNearestSede() {
+  if (inFlight) return;
+  if (!("geolocation" in navigator)) {
+    setState({ sede: state.sede, status: "unavailable" }, false);
+    return;
+  }
+  inFlight = true;
+  setState({ sede: state.sede, status: "locating" }, false);
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => {
+      inFlight = false;
+      setState({ sede: closestTo(coords.latitude, coords.longitude), status: "located" });
+    },
+    (err) => {
+      inFlight = false;
+      setState(
+        { sede: state.sede, status: err.code === err.PERMISSION_DENIED ? "denied" : "unavailable" },
+        false
       );
-    }
-  }, []);
+    },
+    { enableHighAccuracy: false, timeout: 10000, maximumAge: 60 * 60 * 1000 }
+  );
+}
 
-  return nearest;
-};
+/** El usuario elige su sede manualmente. */
+export function selectSede(ciudad: string) {
+  const sede = findByCity(ciudad);
+  if (sede) setState({ sede, status: "manual" });
+}
+
+let silentChecked = false;
+
+/** Si el usuario ya había dado permiso antes, ubica sin mostrar ningún diálogo. */
+async function silentLocateIfGranted() {
+  if (silentChecked || state.status !== "default") return;
+  silentChecked = true;
+  try {
+    const perm = await navigator.permissions?.query({ name: "geolocation" as PermissionName });
+    if (perm?.state === "granted") locateNearestSede();
+  } catch {
+    /* Permissions API no disponible: no hacemos nada (no molestamos al usuario) */
+  }
+}
+
+/** Estado completo: sede + status. */
+export function useSedeState(): SedeState {
+  const snap = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+  useEffect(() => {
+    silentLocateIfGranted();
+  }, []);
+  return snap;
+}
+
+/** Compatibilidad: devuelve solo la sede (Footer, WhatsApp, Contacto). */
+export const useNearestSede = (): Location => useSedeState().sede;

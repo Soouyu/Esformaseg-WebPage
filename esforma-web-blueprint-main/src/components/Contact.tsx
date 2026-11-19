@@ -326,6 +326,8 @@ const Contact = () => {
       <img
         src={nearest.imagenCiudad}
         alt={`Vista de ${nearest.ciudad}`}
+        loading="lazy"
+        decoding="async"
         className="w-full rounded-xl shadow-xl object-cover max-h-[400px]"
       />
       <p className="text-center text-sm sm:text-base text-muted-foreground mt-2">

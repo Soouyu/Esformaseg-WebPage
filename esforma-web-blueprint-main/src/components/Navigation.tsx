@@ -1,16 +1,19 @@
 // src/components/ui/Navigation.tsx
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import esformasegLogo from "@/assets/esformaseg-logo.png";
+import esformasegLogo from "@/assets/esformaseg-logo.webp";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
   const handleScroll = () => {
-    const isOnInternalPage = ["/sobre-nosotros", "/servicios", "/contacto"].includes(window.location.pathname);
+    const isOnInternalPage = pathname !== "/";
     const hasScrolled = window.scrollY > 50;
     setIsScrolled(isOnInternalPage || hasScrolled);
   };
@@ -18,9 +21,9 @@ const Navigation = () => {
 
 
   handleScroll();
-  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("scroll", handleScroll, { passive: true });
   return () => window.removeEventListener("scroll", handleScroll);
-}, []);
+}, [pathname]);
 
   const menuItems = [
     { name: "Inicio", href: "/" },
@@ -33,8 +36,8 @@ const Navigation = () => {
   const isMobileMenuActive = isMenuOpen && window.innerWidth < 768;
 
   const navigateToPage = (href: string) => {
-    window.location.href = href;
     setIsMenuOpen(false);
+    navigate(href);
   };
 
   return (
@@ -53,6 +56,8 @@ const Navigation = () => {
             <img
               src={esformasegLogo}
               alt="Esformaseg"
+              width={40}
+              height={40}
               className="h-10 w-10"
             />
             <span

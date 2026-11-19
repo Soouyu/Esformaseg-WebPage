@@ -1,56 +1,80 @@
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LayoutGroup, motion } from "framer-motion";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
-import Navigation       from "@/components/Navigation";
-import Footer           from "@/components/Footer";
-import AboutUs          from "@/components/AboutUs";
-import Services         from "@/components/Services";
-import Testimonials     from "@/components/Testimonials";
-import Contact          from "@/components/Contact";
-import NotFound         from "./pages/NotFound";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import { HeroWithLoader } from "@/components/HeroWithLoader";
 
-// 👇 nuevo: botón flotante de WhatsApp
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+// Páginas internas: se descargan solo cuando el usuario las visita
+const AboutUs = lazy(() => import("@/components/AboutUs"));
+const Services = lazy(() => import("@/components/Services"));
+const Testimonials = lazy(() => import("@/components/Testimonials"));
+const Contact = lazy(() => import("@/components/Contact"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
-const queryClient = new QueryClient();
+// Precarga las páginas internas en segundo plano cuando el navegador está libre
+const prefetchPages = () => {
+  import("@/components/AboutUs");
+  import("@/components/Services");
+  import("@/components/Contact");
+};
+
+/** Al cambiar de página: sube al inicio, o baja al #ancla si existe. */
+function ScrollManager() {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    let tries = 0;
+    const id = window.setInterval(() => {
+      const el = document.querySelector(hash);
+      if (el || ++tries > 20) {
+        el?.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.clearInterval(id);
+      }
+    }, 100);
+    return () => window.clearInterval(id);
+  }, [pathname, hash]);
+  return null;
+}
+
+const PageFallback = () => <div className="min-h-screen" aria-busy="true" />;
 
 export default function App() {
+  useEffect(() => {
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number };
+    if (w.requestIdleCallback) w.requestIdleCallback(prefetchPages);
+    else setTimeout(prefetchPages, 3000);
+  }, []);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster position="top-right" richColors expand duration={20000} />
+    <TooltipProvider>
+      <Toaster position="top-right" richColors expand duration={20000} />
+      <BrowserRouter>
+        <ScrollManager />
+        <Navigation />
 
-        <LayoutGroup>
-          <motion.div initial={{ opacity: 1 }} animate={{ opacity: 1 }}>
-            <BrowserRouter>
-              <Navigation />
+        <main className="min-h-screen pt-[var(--nav-h)] px-0">
+          <Suspense fallback={<PageFallback />}>
+            <Routes>
+              <Route path="/" element={<HeroWithLoader />} />
+              <Route path="/sobre-nosotros" element={<AboutUs />} />
+              <Route path="/servicios" element={<Services />} />
+              <Route path="/casos-de-uso" element={<Testimonials />} />
+              <Route path="/contacto" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </main>
 
-              <main className="min-h-screen pt-[var(--nav-h)] px-0">
-                <Routes>
-                  {/* Home con loader solo la primera vez */}
-                  <Route path="/" element={<HeroWithLoader />} />
-
-                  {/* Resto de rutas */}
-                  <Route path="/sobre-nosotros" element={<AboutUs />} />
-                  <Route path="/servicios" element={<Services />} />
-                  <Route path="/casos-de-uso" element={<Testimonials />} />
-                  <Route path="/contacto" element={<Contact />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-
-              {/* Botón flotante de WhatsApp presente en todo el sitio */}
-              <FloatingWhatsApp />
-
-              <Footer />
-            </BrowserRouter>
-          </motion.div>
-        </LayoutGroup>
-      </TooltipProvider>
-    </QueryClientProvider>
+        <FloatingWhatsApp />
+        <Footer />
+      </BrowserRouter>
+    </TooltipProvider>
   );
 }
